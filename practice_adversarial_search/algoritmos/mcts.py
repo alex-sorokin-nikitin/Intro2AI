@@ -63,7 +63,9 @@ class MCTS:
         # AYUDA: max(lista, key=f) devuelve el elemento x de la lista con mayor f(x).
         #        A key se le pasa la función f, sin llamarla: sin paréntesis.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 3 a) sin completar: MCTS.seleccionar()')
+        while (not nodo.sin_probar) and nodo.hijos:
+            nodo = max(nodo.hijos, key=self.ucb1)
+        return nodo
 
     def ucb1(self, n):              # explotar + explorar
         ############################################################################
@@ -72,7 +74,7 @@ class MCTS:
         # de su padre (n.padre) y la constante self.C.
         # AYUDA: math.log es el logaritmo neperiano y math.sqrt, la raíz cuadrada.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 3 a) sin completar: MCTS.ucb1()')
+        return n.U / n.N + self.C * math.sqrt(math.log(n.padre.N) / n.N)
 
     # 2 · EXPANSIÓN: un hijo nuevo, con una jugada sin probar
     def expandir(self, nodo):
@@ -85,7 +87,13 @@ class MCTS:
         #     añádalo a los hijos del nodo y devuélvalo.
         # AYUDA: lista.pop() quita de la lista su último elemento y lo devuelve.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 3 b) sin completar: MCTS.expandir()')
+        if not nodo.sin_probar:
+            return nodo
+        else:
+            accion, sucesor = nodo.sin_probar.pop()
+            nuevo = Nodo(self.game, sucesor, nodo, accion)
+            nodo.hijos.append(nuevo)
+            return nuevo
 
     # 3 · SIMULACIÓN: una partida al azar, SIN heurística
     def simular(self, state):
@@ -99,7 +107,9 @@ class MCTS:
         #        semilla que fija el programa obtendrá exactamente los números del
         #        guion.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 3 c) sin completar: MCTS.simular()')
+        while not self.game.is_end(state):
+            _, state = random.choice(self.game.successors(state))
+        return self.game.utility(state)
 
     # 4 · RETROPROPAGACIÓN: el resultado sube hasta la raíz
     def retropropagar(self, nodo, resultado):
@@ -114,7 +124,12 @@ class MCTS:
         #     signo. Con ese valor v, visto por quien eligió, U suma (v + 1) / 2:
         #     1 si gana, 1/2 si son tablas y 0 si pierde.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 3 d) sin completar: MCTS.retropropagar()')
+        while nodo is not None:
+            nodo.N += 1
+            if nodo.padre is not None:
+                v = (1 if self.game.player(nodo.padre.state) == "MAX" else -1) * resultado
+                nodo.U += (v + 1) / 2
+            nodo = nodo.padre
 
 
 class Nodo:

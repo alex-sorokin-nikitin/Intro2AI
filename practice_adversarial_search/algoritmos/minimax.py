@@ -39,7 +39,13 @@ class Minimax:
         #   - si le toca a "MAX" (self.game.player), devuelva self.valor_max(state);
         #   - si no, devuelva self.valor_min(state).
         ############################################################################
-        raise NotImplementedError('EJERCICIO 1 sin completar: Minimax.valor()')
+        if self.game.is_end(state):
+            return (self.game.utility(state), None)
+
+        if self.game.player(state) == "MAX":
+            return self.valor_max(state)
+        else:
+            return self.valor_min(state)
 
     def valor_max(self, state):
         ############################################################################
@@ -53,11 +59,23 @@ class Minimax:
         #   - si v es mayor que mejor, quédese con él y con su acción;
         #   - al terminar, devuelva la pareja (mejor, jugada).
         ############################################################################
-        raise NotImplementedError('EJERCICIO 1 sin completar: Minimax.valor_max()')
+        mejor, jugada = -math.inf, None
+        for accion, sucesor in self.game.successors(state):
+            v, _ = self.valor(sucesor)
+            if v > mejor:
+                jugada = accion
+                mejor = v
+        return mejor, jugada
 
     def valor_min(self, state):
         ############################################################################
         # EJERCICIO 1: SE DEBE COMPLETAR EL CÓDIGO POR EL ESTUDIANTE.
         # El MÍNIMO de la fórmula: es valor_max con solo dos cambios.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 1 sin completar: Minimax.valor_min()')
+        mejor, jugada = math.inf, None
+        for accion, sucesor in self.game.successors(state):
+            v, _ = self.valor(sucesor)
+            if v < mejor:
+                jugada = accion
+                mejor = v
+        return mejor, jugada

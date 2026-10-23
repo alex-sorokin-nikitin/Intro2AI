@@ -32,7 +32,13 @@ class AlfaBeta:
         # EJERCICIO 2: SE DEBE COMPLETAR EL CÓDIGO POR EL ESTUDIANTE.
         # El mismo valor que en Minimax, pasando alfa y beta a valor_max y valor_min.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 2 sin completar: AlfaBeta.valor()')
+        if self.game.is_end(state):
+            return (self.game.utility(state), None)
+
+        if self.game.player(state) == "MAX":
+            return self.valor_max(state, alfa, beta)
+        else:
+            return self.valor_min(state, alfa, beta)
 
     def valor_max(self, state, alfa, beta):
         ############################################################################
@@ -44,7 +50,17 @@ class AlfaBeta:
         #          if beta <= alfa:
         #              break                    # PODA: el resto sobra
         ############################################################################
-        raise NotImplementedError('EJERCICIO 2 sin completar: AlfaBeta.valor_max()')
+        mejor, jugada = -math.inf, None
+        for accion, sucesor in self.game.successors(state):
+            v, _ = self.valor(sucesor, alfa, beta)
+            if v > mejor:
+                jugada = accion
+                mejor = v
+                alfa = max(alfa, mejor)
+                if beta <= alfa:
+                    break
+        return mejor, jugada
+
 
     def valor_min(self, state, alfa, beta):
         ############################################################################
@@ -52,4 +68,13 @@ class AlfaBeta:
         # Lo simétrico en MIN: después de cada hijo se BAJA beta con
         # beta = min(beta, mejor), y se poda igual, si beta <= alfa.
         ############################################################################
-        raise NotImplementedError('EJERCICIO 2 sin completar: AlfaBeta.valor_min()')
+        mejor, jugada = math.inf, None
+        for accion, sucesor in self.game.successors(state):
+            v, _ = self.valor(sucesor, alfa, beta)
+            if v < mejor:
+                jugada = accion
+                mejor = v
+                beta = min(beta, mejor)
+                if beta <= alfa:
+                    break
+        return mejor, jugada
