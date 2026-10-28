@@ -12,31 +12,41 @@ if __name__ == "__main__":
     #################################
     # EJERCICIO 2.1: OBSERVE EL GRAFO
     #################################
-    print(spain_network.graph)
+    print(spain_network.graph, '\n\n')
+    print(spain_network.graph['Alicante'])
+    print(spain_network.graph['Cuenca']['Valencia'])
     spain_network.plot_network()
 
     #################################
     # EJERCICIO 2.2: EJECUTE get_node(self, name), get_distance, ... etc
     # sobre el grafo.
     #################################
+    print(spain_network.get_node("Madrid"))
+    print(spain_network.get_distance("Madrid", "Cuenca"))
+    print(spain_network.get_neighbors("Madrid"))
+    print(spain_network.compute_flying_distance("Madrid", "Elx"))
 
     #########################################################
     # Descomente uno de los algoritmos cada vez
     ########################################################
-    #algoritmo = BFS_Algorithm(spain_network)
-    #origen = 'Madrid'
-    #destino = 'Elx'
-    #route, distance, iterations = algoritmo.find_route(origen, destino)
+    '''
+    algoritmo = BFS_Algorithm(spain_network)
+    origen = 'Madrid'
+    destino = 'Elx'
+    route, distance, iterations = algoritmo.find_route(origen, destino)
+    '''
 
+    '''
     algoritmo = Greedy_Algorithm(spain_network)
     origen = 'Madrid'
     destino = 'Elx'
     route, distance, iterations = algoritmo.find_route(origen , destino)
+    '''
 
-    # algoritmo = A_star_Algorithm(spain_network)
-    # origen = 'Madrid'
-    # destino = 'Elx'
-    # route, distance, iterations = algoritmo.find_route(origen, destino)
+    algoritmo = A_star_Algorithm(spain_network)
+    origen = 'Madrid'
+    destino = 'Elx'
+    route, distance, iterations = algoritmo.find_route(origen, destino)
 
     # Print Results ---
     if route:

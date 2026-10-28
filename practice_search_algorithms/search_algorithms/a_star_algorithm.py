@@ -29,6 +29,7 @@ class A_star_Algorithm():
     def process_neighbors(self, current_node, destination_name):
         # Get the list of neighbors of the current node
         neighbors = self.graph.get_neighbors(current_node)
+        print("Vecinos: ", neighbors)
         for neighbor in neighbors:
             if neighbor in self.closed_queue:
                 continue
@@ -62,10 +63,7 @@ class A_star_Algorithm():
         while len(self.open_queue) > 0:
             iterations += 1
             current_node = self.get_next_node()
-            #########################################################
-            # EJERCICIO 2.12: IMPRIMA POR PANTALLA EL NODO ACTUAL.
-            # OBSERVE EL AVANCE DEL ALGORITMO
-            #########################################################
+            print("Nodo Actual: ", current_node)
             self.closed_queue.append(current_node)
             if current_node == destination_name:
                 route, distance = self.reconstruct_route(destination_name)

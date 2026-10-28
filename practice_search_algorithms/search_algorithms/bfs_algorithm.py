@@ -8,11 +8,30 @@ class BFS_Algorithm():
         self.closed_queue = []  # llista tancada
         # saves the parent of each node to backtrack the route
         self.node_info = {}
+        self.max_open_size = 0
+        self.max_closed_size = 0
 
     def print_info(self, iteration, current_node):
         ###########################################################################
         # EJERCICIO 2.4: IMPRIMA POR PANTALLA LA INFORMACIÓN RELEVANTE
         ###########################################################################
+        print("#" * 5, "Lista Abierta", "#" * 100)
+        print(self.open_queue)
+        self.max_open_size = max(len(self.open_queue), self.max_open_size)
+        print("Tamaño Máximo: ", self.max_open_size)
+        print("\n")
+        print("#" * 5, "Lista Cerrada", "#" * 100)
+        print(self.closed_queue)
+        self.max_closed_size = max(len(self.closed_queue), self.max_closed_size)
+        print("Tamaño Máximo: ", self.max_closed_size)
+        print("\n")
+        print("#" * 5, "Información de Nodos", "#" * 100)
+        print(self.node_info)
+        print("\n")
+        print("#" * 5, "Vecinos", "#" * 100)
+        print(self.graph.get_neighbors(current_node))
+        print("\n")
+        print("-" * 100)
         return
 
     def reconstruct_route(self, current_node_name):
@@ -24,9 +43,13 @@ class BFS_Algorithm():
         ###########################################################################
         # EJERCICIO 2.5: DEBE RECONSTRUIR LA RUTA A PARTIR DE NODE_INFO
         ###########################################################################
-        route = []
+        route = [current_node_name]
         total_distance = 0
-        # TODO: DEBE DEVOLVER la ruta calculada y la distancia total
+        while self.node_info[current_node_name]['parent'] != None:
+            current_parent = self.node_info[current_node_name]['parent']
+            route.append(current_parent)
+            total_distance += self.graph.get_distance(current_parent, current_node_name)
+            current_node_name = current_parent
         return route, total_distance
 
     def process_neighbors(self, current_node):
@@ -79,11 +102,13 @@ class BFS_Algorithm():
             # DE MEMORIA DEL ALGORITMO
             ######################################################################
             current_node = self.open_queue.pop(0)
+            self.print_info(iteration, current_node)
             # add the current_node to the closed queue
             self.closed_queue.append(current_node)
             if current_node == destination_name:
                 route, distance = self.reconstruct_route(current_node)
                 return route, distance, iteration
             self.process_neighbors(current_node)
+            iteration += 1
         return None, None, iteration  # No route exists
 

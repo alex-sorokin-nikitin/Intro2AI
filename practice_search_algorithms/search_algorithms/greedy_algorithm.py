@@ -30,9 +30,7 @@ class Greedy_Algorithm():
         :param destination:
         :return:
         """
-        ###########################################################################################
-        # EJERCICIO 2.8: debe reordenarse la cola abierta (self.open_queue) en base a los valores de la heurística h
-        ###########################################################################################
+        self.open_queue.sort(key=lambda n: self.h[n])
         return
 
     def reconstruct_route(self, current_node_name):
@@ -79,9 +77,7 @@ class Greedy_Algorithm():
             if neighbor not in self.open_queue:
                 self.open_queue.append(neighbor)
                 self.node_info[neighbor] = {'parent': current_node}
-                ###########################################################################################
-                # EJERCICIO 2.8: OJO! debemos calcular la distancia en línea recta hasta el destino
-                ###########################################################################################
+                self.h[neighbor] = self.graph.compute_flying_distance(neighbor, destination_node)
 
     def find_route(self, start_name, destination_name):
         """Finds a route using iterative Breadth-First Search."""
@@ -104,9 +100,7 @@ class Greedy_Algorithm():
                 route, distance = self.reconstruct_route(current_node)
                 return route, distance, iteration
             self.process_neighbors(current_node, destination_name)
-            #########################################################
-            # EJERCICIO 2.8: PROGRAME Y LLAME a self.reorder_queue para reordenar la cola
-            # y poder elegir el nodo con menor h
-            #########################################################
+            self.reorder_queue()
+            iteration += 1
         return None, None, iteration  # No route exists
 
